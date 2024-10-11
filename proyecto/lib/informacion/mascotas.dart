@@ -46,3 +46,9 @@ const mascotas_perdidas = [
  
  )
 ];
+
+class Mascota {
+  final String imageUrl;
+  final String title;
+  Mascota({required this.imageUrl, required this.title});
+}
