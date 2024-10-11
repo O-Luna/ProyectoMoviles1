@@ -3,6 +3,7 @@ import 'package:proyecto/informacion/mascotas.dart';
 import 'package:proyecto/pantallas/configuracion.dart';
 import 'package:proyecto/pantallas/detalles.dart';
 import 'package:proyecto/pantallas/perdidos.dart';
+import 'package:proyecto/pantallas/agregar.dart';
 
 class Principal extends StatefulWidget {
   const Principal({super.key});
@@ -90,7 +91,9 @@ class _PrincipalState extends State<Principal> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Acción cuando se presiona el botón
+          Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context)=>Agregar()));
         },
         child: Icon(Icons.add),
       ),

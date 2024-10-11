@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto/pantallas/inicio.dart';
-import 'package:proyecto/informacion/category.dart';
 class InicioSesion extends StatefulWidget {
   const InicioSesion({super.key});
 
