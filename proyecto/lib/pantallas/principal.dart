@@ -13,36 +13,10 @@ class Principal extends StatefulWidget {
 
 class _PrincipalState extends State<Principal> {
   var currentPageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF5F5F5), 
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        title: Text(
-          "Quien dejó a los perros afuera",
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black87),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Config()));
-            },
-            icon: Icon(Icons.sunny, color: Colors.black87)
-          )
-        ],
-      ),
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         itemCount: infomascotas.length,
@@ -83,7 +57,6 @@ class _PrincipalState extends State<Principal> {
                         ),
                       ),
                     ),
-                    
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -114,6 +87,12 @@ class _PrincipalState extends State<Principal> {
             ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Acción cuando se presiona el botón
+        },
+        child: Icon(Icons.add),
       ),
     );
   }

@@ -44,7 +44,7 @@ class _InicioSesionState extends State<InicioSesion> {
             ElevatedButton(onPressed: (){
           Navigator.push(
             context, 
-            MaterialPageRoute(builder: (context)=>Principal()));
+            MaterialPageRoute(builder: (context)=>Inicio()));
         },
         child: Text("Iniciar sesión"),),
           ],

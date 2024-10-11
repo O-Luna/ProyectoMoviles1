@@ -3,15 +3,16 @@ import 'package:proyecto/informacion/mascotas.dart';
 import 'package:proyecto/pantallas/configuracion.dart';
 import 'package:proyecto/pantallas/detalles.dart';
 import 'package:proyecto/pantallas/perdidos.dart';
+import 'package:proyecto/pantallas/principal.dart';
 
-class Principal extends StatefulWidget {
-  const Principal({super.key});
+class Inicio extends StatefulWidget {
+  const  Inicio({super.key});
 
   @override
-  State<Principal> createState() => _PrincipalState();
+  State<Inicio> createState() => _InicioState();
 }
 
-class _PrincipalState extends State<Principal> {
+class _InicioState extends State<Inicio> {
   var currentPageIndex = 0;
    final List<Widget> _screens = [
     Principal(),
@@ -21,6 +22,22 @@ class _PrincipalState extends State<Principal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: [
+        AppBar(
+          title: const Text('Mascotas'),
+          actions: [
+            IconButton(onPressed: (){
+              Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context)=>Config()));
+
+            }, icon: Icon(Icons.settings))
+          ],
+        ),
+        AppBar(
+          title: const Text('Perdidos'),
+        ),
+      ][currentPageIndex],
       backgroundColor: Color(0xFFF5F5F5), // Fondo gris claro elegante
       body: 
       _screens[currentPageIndex],
