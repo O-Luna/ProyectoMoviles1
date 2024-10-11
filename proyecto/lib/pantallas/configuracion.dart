@@ -16,20 +16,75 @@ class _ConfigState  extends State<Config> {
       ),
 
       body: Container(
-      color: checked ? Colors.grey: Colors.green,
+      //color: checked ? Colors.grey: Colors.green,
       child: Center(
-      child: CheckboxListTile(
-      tileColor: Colors.red,
-      title: const Text('CheckboxListTile with red background'),
-      value: checked,
-      onChanged:(bool? value) { 
-        setState(() {
-          checked=value ??false;
-        });
-      },
+          child: 
+          Column(
+            children: [
+              CheckboxListTile(
+              //tileColor: Colors.red,
+              title: const Text('Cambiar a modo oscuro'),
+              value: checked,
+              onChanged:(bool? value) { 
+                setState(() {
+                  checked=value ??false;
+                });
+              },
+              ),
+              ElevatedButton(
+              onPressed: (){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    duration: Duration(seconds: 5),
+                    content: Text('Pendiente: Falta la forma de modificar al usuario'),
+                    action: SnackBarAction(
+                      label: 'Cerrar',
+                      onPressed: () {
+                      }
+                    )
+                  )
+                );
+              },
+              child: Text("Modificar usuario"),
+            ),
+
+            ElevatedButton(
+              onPressed: (){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    duration: Duration(seconds: 5),
+                    content: Text('Pendiente: Falta añadir el bluetooth y su configuración'),
+                    action: SnackBarAction(
+                      label: 'Cerrar',
+                      onPressed: () {
+                      }
+                    )
+                  )
+                );
+              },
+              child: Text("Configurar bluetooth"),
+            ),
+
+            ElevatedButton(
+              onPressed: (){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    duration: Duration(seconds: 5),
+                    content: Text('Pendiente: Falta la forma de poder cerrar sesión'),
+                    action: SnackBarAction(
+                      label: 'Cerrar',
+                      onPressed: () {
+                      }
+                    )
+                  )
+                );
+              },
+              child: Text("Cerrar Sesión"),
+            ),
+            ],
+          ),
+      ),
     ),
-  ),
-),
 
     );
   }

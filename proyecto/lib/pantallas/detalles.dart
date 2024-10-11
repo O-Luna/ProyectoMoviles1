@@ -50,8 +50,8 @@ class DetalleMascota extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyLarge,
                   ), 
                   Container(
-                    width: 50,
-                    height: 50, 
+                    width: 380,
+                    height: 300, 
                     child: OSMViewer(
                       controller: SimpleMapController(
                         initPosition: GeoPoint(
@@ -68,15 +68,24 @@ class DetalleMascota extends StatelessWidget {
                       )
                     ),
                   ),
-                  Image.network(
-                    "https://th.bing.com/th/id/R.0f074dff24f3e616903c29deac23cba7?rik=YAgjzHag3BnuKQ&riu=http%3a%2f%2fallinallnews.com%2fwp-content%2fuploads%2f2015%2f05%2fGoogle-Maps-1024x574.png&ehk=fWQ36tM5F2fQfSM1%2fTmeUa%2b%2bgbAyc6OMeSPBR9OgWy4%3d&risl=&pid=ImgRaw&r=0",
-                    fit: BoxFit.cover,
-                  ),
+                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [                      
                       ElevatedButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              duration: Duration(seconds: 5),
+                              content: Text('Pendiente: Falta agregar la mascota a la lista de perdidos'),
+                              action: SnackBarAction(
+                                label: 'Cerrar',
+                                onPressed: () {
+                                }
+                              )
+                            )
+                          );
+                        },
                         child: Text("Reportar como perdido"),
                       ),
                     ],
@@ -91,3 +100,12 @@ class DetalleMascota extends StatelessWidget {
     );
   }
 }
+
+/**
+ * 
+ * 
+ * Image.network(
+                    "https://th.bing.com/th/id/R.0f074dff24f3e616903c29deac23cba7?rik=YAgjzHag3BnuKQ&riu=http%3a%2f%2fallinallnews.com%2fwp-content%2fuploads%2f2015%2f05%2fGoogle-Maps-1024x574.png&ehk=fWQ36tM5F2fQfSM1%2fTmeUa%2b%2bgbAyc6OMeSPBR9OgWy4%3d&risl=&pid=ImgRaw&r=0",
+                    fit: BoxFit.cover,
+                  ),
+ */

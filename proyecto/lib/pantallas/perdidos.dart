@@ -59,11 +59,25 @@ class _PerdidosState extends State<Perdidos> {
                                 color: Colors.black87,
                               ),
                             ),
-                            Icon(
+                            IconButton(
+                              onPressed: (){
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    duration: Duration(seconds: 5),
+                                    content: Text('Pendiente: Falta poder reportar como encontrado'),
+                                    action: SnackBarAction(
+                                      label: 'Cerrar',
+                                      onPressed: () {
+                                      }
+                                    )
+                                  )
+                                );
+                              },
+                               icon: Icon(
                               Icons.report_problem_rounded,
                               size: 20,
                               color: Colors.red,
-                            ),
+                            )),                            
                           ],
                         ),
                       ),

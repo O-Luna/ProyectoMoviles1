@@ -40,10 +40,36 @@ class _AgregarState extends State<Agregar> {
               )
             ),
         
-            IconButton(onPressed: (){}, icon: Icon(Icons.photo)),
+            IconButton(
+              onPressed: (){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    duration: Duration(seconds: 5),
+                    content: Text('Pendiente: Falta poder añadir la foto de la mascota'),
+                    action: SnackBarAction(
+                      label: 'Cerrar',
+                      onPressed: () {
+                      }
+                    )
+                  )
+                );
+            }, 
+            icon: Icon(Icons.photo)),
 
             ElevatedButton(
-              onPressed: (){},
+              onPressed: (){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    duration: Duration(seconds: 5),
+                    content: Text('Pendiente: Falta agregar la mascota a la lista'),
+                    action: SnackBarAction(
+                      label: 'Cerrar',
+                      onPressed: () {
+                      }
+                    )
+                  )
+                );
+              },
               child: Text("Agregar"),
             ),
 
