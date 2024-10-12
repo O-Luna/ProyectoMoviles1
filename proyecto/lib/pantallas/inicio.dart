@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto/informacion/mascotas.dart';
 import 'package:proyecto/pantallas/configuracion.dart';
-import 'package:proyecto/pantallas/detalles.dart';
+//import 'package:proyecto/pantallas/detalles.dart';
+import 'package:provider/provider.dart';
 import 'package:proyecto/pantallas/perdidos.dart';
 import 'package:proyecto/pantallas/principal.dart';
+import 'package:proyecto/providers/providers.dart';
 
 class Inicio extends StatefulWidget {
   const  Inicio({super.key});
@@ -21,6 +22,8 @@ class _InicioState extends State<Inicio> {
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<Providers>(
+      builder: (context, provider, child) {
     return Scaffold(
       appBar: [
         AppBar(
@@ -38,11 +41,11 @@ class _InicioState extends State<Inicio> {
           title: const Text('Perdidos'),
         ),
       ][currentPageIndex],
-      backgroundColor: Color(0xFFF5F5F5), // Fondo gris claro elegante
+      backgroundColor: provider.isDarkMode ? Colors.grey[900] : Colors.white,
       body: 
       _screens[currentPageIndex],
       bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.white,
+        backgroundColor: provider.isDarkMode ? Colors.grey[800] : Colors.white,
         elevation: 0,
         selectedIndex: currentPageIndex,
         onDestinationSelected: (int index) {
@@ -63,6 +66,8 @@ class _InicioState extends State<Inicio> {
           ),
         ]
       )
+    );
+    }
     );
   }
 }

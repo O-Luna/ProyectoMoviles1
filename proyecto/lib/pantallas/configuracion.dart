@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proyecto/providers/providers.dart';
 
 class Config extends StatefulWidget {
   const Config({super.key});
@@ -7,35 +9,32 @@ class Config extends StatefulWidget {
   State<Config> createState() => _ConfigState();
 }
 class _ConfigState  extends State<Config> {
-  bool checked=false;
+  bool darkmode=false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Configuración"),
-      ),
-
-      body: Container(
-      //color: checked ? Colors.grey: Colors.green,
-      child: Center(
+    return Consumer<Providers>(
+      builder: (context, provider,child){
+        return Scaffold(
+          appBar: AppBar(
+            title: Text("Configuración"),
+          ),
+      body:
+       Center(
           child: 
           Column(
             children: [
-              CheckboxListTile(
-              //tileColor: Colors.red,
-              title: const Text('Cambiar a modo oscuro'),
-              value: checked,
-              onChanged:(bool? value) { 
-                setState(() {
-                  checked=value ??false;
-                });
-              },
-              ),
+                  Switch(
+                        value: provider.isDarkMode,
+                        onChanged: (value) {
+                          provider.fondo();
+                    
+                        },
+                      ),
               ElevatedButton(
               onPressed: (){
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    duration: Duration(seconds: 5),
+                    duration: Duration(seconds: 3),
                     content: Text('Pendiente: Falta la forma de modificar al usuario'),
                     action: SnackBarAction(
                       label: 'Cerrar',
@@ -84,7 +83,9 @@ class _ConfigState  extends State<Config> {
             ],
           ),
       ),
-    ),
+    );
+    }
+    
 
     );
   }
