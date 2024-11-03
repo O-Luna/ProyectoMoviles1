@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proyecto/providers/providers.dart';
@@ -23,6 +24,10 @@ class _ConfigState  extends State<Config> {
           child: 
           Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text("Activar modo oscuro",style: TextStyle(fontSize: 18),),
                   Switch(
                         value: provider.isDarkMode,
                         onChanged: (value) {
@@ -30,6 +35,8 @@ class _ConfigState  extends State<Config> {
                     
                         },
                       ),
+                ]
+              ),
               ElevatedButton(
               onPressed: (){
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -65,18 +72,9 @@ class _ConfigState  extends State<Config> {
             ),
 
             ElevatedButton(
-              onPressed: (){
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    duration: Duration(seconds: 5),
-                    content: Text('Pendiente: Falta la forma de poder cerrar sesión'),
-                    action: SnackBarAction(
-                      label: 'Cerrar',
-                      onPressed: () {
-                      }
-                    )
-                  )
-                );
+              onPressed: () async { 
+                        await FirebaseAuth.instance.signOut();
+              Navigator.of(context).popUntil((route) => route.isFirst);
               },
               child: Text("Cerrar Sesión"),
             ),

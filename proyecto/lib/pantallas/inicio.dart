@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto/pantallas/configuracion.dart';
-//import 'package:proyecto/pantallas/detalles.dart';
 import 'package:provider/provider.dart';
 import 'package:proyecto/pantallas/perdidos.dart';
 import 'package:proyecto/pantallas/principal.dart';

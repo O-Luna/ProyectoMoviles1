@@ -1,10 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto/informacion/mascotas.dart';
+import 'package:proyecto/informacion/modelo.dart';
+
 class Providers with ChangeNotifier {
   bool _ActivDarkMode = false;
   bool get isDarkMode => _ActivDarkMode;
 
+  List<Mascotas> _mascotasList = List.from(infomascotas);
+  List<Mascotas> get mascotasList => _mascotasList;
+
   void fondo() {
     _ActivDarkMode = !_ActivDarkMode;
+    notifyListeners();
+  }
+
+   void reorderMascotas(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    final item = _mascotasList.removeAt(oldIndex);
+    _mascotasList.insert(newIndex, item);
     notifyListeners();
   }
 

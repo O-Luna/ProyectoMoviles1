@@ -1,7 +1,10 @@
+import 'package:provider/provider.dart';
 import 'package:proyecto/informacion/mascotas.dart';
 import 'package:proyecto/informacion/modelo.dart';
 import 'package:flutter/material.dart';
 import 'package:proyecto/informacion/mascotas.dart';
+import 'package:proyecto/providers/providers.dart';
+
 
 class Perdidos extends StatefulWidget {
   const Perdidos({super.key});
@@ -13,6 +16,8 @@ class Perdidos extends StatefulWidget {
 class _PerdidosState extends State<Perdidos> {
   @override
   Widget build(BuildContext context) {
+        final provider = Provider.of<Providers>(context);
+
     return ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         itemCount: mascotas_perdidas.length,
@@ -26,7 +31,7 @@ class _PerdidosState extends State<Perdidos> {
               child: Container(
                 height: 120,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: provider.isDarkMode ? Colors.grey : Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(

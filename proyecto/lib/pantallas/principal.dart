@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:proyecto/informacion/mascotas.dart';
 import 'package:proyecto/informacion/modelo.dart';
 import 'package:proyecto/pantallas/agregar.dart';
 import 'package:proyecto/pantallas/configuracion.dart';
 import 'package:proyecto/pantallas/detalles.dart';
 import 'package:proyecto/pantallas/perdidos.dart';
+import 'package:proyecto/providers/providers.dart';
 
 class Principal extends StatefulWidget {
   const Principal({super.key});
@@ -15,17 +17,20 @@ class Principal extends StatefulWidget {
 
 class _PrincipalState extends State<Principal> {
   var currentPageIndex = 0;
-  List<Mascotas> mascotasList = List.from(infomascotas); 
-
+  //List<Mascotas> mascotasList = List.from(infomascotas); 
+  
+ //color: provider.isDarkMode ? Colors.grey: Colors.white,
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<Providers>(context);
     return Scaffold(
       body: ReorderableListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         children: [
-          for (int index = 0; index < mascotasList.length; index++)
-            Padding(
-              key: ValueKey(mascotasList[index]),
+          for (int index = 0; index < provider.mascotasList.length; index++)    
+          Container( 
+            key: ValueKey(provider.mascotasList[index]),
+            child: Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: InkWell(
                 onTap: () {
@@ -33,7 +38,7 @@ class _PrincipalState extends State<Principal> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => DetalleMascota(
-                        mascota: mascotasList[index], 
+                        mascota: provider.mascotasList[index], 
                       ),
                     ),
                   );
@@ -41,7 +46,7 @@ class _PrincipalState extends State<Principal> {
                 child: Container(
                   height: 120,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: provider.isDarkMode ? Colors.grey: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -55,7 +60,7 @@ class _PrincipalState extends State<Principal> {
                             bottomLeft: Radius.circular(20),
                           ),
                           image: DecorationImage(
-                            image: NetworkImage(mascotasList[index].imageUrl),
+                            image: NetworkImage(provider.mascotasList[index].imageUrl),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -67,7 +72,7 @@ class _PrincipalState extends State<Principal> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                mascotasList[index].title,
+                                provider.mascotasList[index].title,
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w500,
@@ -88,15 +93,14 @@ class _PrincipalState extends State<Principal> {
                 ),
               ),
             ),
+          )
+      
         ],
         onReorder: (int oldIndex, int newIndex) {
           setState(() {
-            if (newIndex > oldIndex) {
-              newIndex -= 1;
-            }
-            final item = mascotasList.removeAt(oldIndex);
-            mascotasList.insert(newIndex, item);
-          });
+          provider.reorderMascotas(oldIndex, newIndex);
+          }
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
