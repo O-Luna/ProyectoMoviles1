@@ -12,7 +12,7 @@ class Principal extends StatefulWidget {
   const Principal({super.key});
 
   @override
-  State<Principal> createState() => _PrincipalState();
+  
 }
 
 class _PrincipalState extends State<Principal> {
@@ -24,7 +24,9 @@ class _PrincipalState extends State<Principal> {
   Widget build(BuildContext context) {
     final provider = Provider.of<Providers>(context);
     return Scaffold(
-      body: ReorderableListView(
+      body:  
+      
+      ReorderableListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         children: [
           for (int index = 0; index < provider.mascotasList.length; index++)    
@@ -97,10 +99,7 @@ class _PrincipalState extends State<Principal> {
       
         ],
         onReorder: (int oldIndex, int newIndex) {
-          setState(() {
           provider.reorderMascotas(oldIndex, newIndex);
-          }
-          );
         },
       ),
       floatingActionButton: FloatingActionButton(
