@@ -3,18 +3,17 @@ import 'package:proyecto/informacion/mascotas.dart';
 import 'package:proyecto/informacion/modelo.dart';
 import 'package:flutter/material.dart';
 import 'package:proyecto/informacion/mascotas.dart';
-import 'package:proyecto/pantallas/detalles.dart';
 import 'package:proyecto/providers/providers.dart';
 
 
-class Perdidos extends StatefulWidget {
-  const Perdidos({super.key});
+class Encontrados extends StatefulWidget {
+  const Encontrados({super.key});
 
   @override
-  State<Perdidos> createState() => _PerdidosState();
+  State<Encontrados> createState() => _EncontradosState();
 }
 
-class _PerdidosState extends State<Perdidos> {
+class _EncontradosState extends State<Encontrados> {
   @override
   Widget build(BuildContext context) {
         final provider = Provider.of<Providers>(context);
@@ -28,15 +27,6 @@ class _PerdidosState extends State<Perdidos> {
             padding: const EdgeInsets.only(bottom: 12),
             child: InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetalleMascota(
-                        mascota: mascotas_perdidas[index], 
-                      ),
-                    ),
-                  );
-
               },
               child: Container(
                 height: 120,
@@ -74,7 +64,7 @@ class _PerdidosState extends State<Perdidos> {
                                 color: Colors.black87,
                               ),
                             ),
-                           /* IconButton(
+                            IconButton(
                               onPressed: (){
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
@@ -89,10 +79,10 @@ class _PerdidosState extends State<Perdidos> {
                                 );
                               },
                                icon: Icon(
-                              Icons.report_problem_rounded,
+                              Icons.radio_button_checked,
                               size: 20,
-                              color: Colors.red,
-                            )),  */                          
+                              color: Colors.green,
+                            )),                            
                           ],
                         ),
                       ),

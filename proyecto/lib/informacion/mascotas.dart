@@ -53,6 +53,7 @@ const mascotas_perdidas = [
  )
 ];
 
+
 class Mascota {
   final String imageUrl;
   final String title;

@@ -9,8 +9,15 @@ class Providers with ChangeNotifier {
   List<Mascotas> _mascotasList = List.from(infomascotas);
   List<Mascotas> get mascotasList => _mascotasList;
 
+  int _currentPageIndex=0;
+  int get currentPageIndex => _currentPageIndex;
   void fondo() {
     _ActivDarkMode = !_ActivDarkMode;
+    notifyListeners();
+  }
+
+  void pageindex(int index){
+    _currentPageIndex = index;
     notifyListeners();
   }
 
