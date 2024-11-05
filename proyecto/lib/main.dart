@@ -5,7 +5,6 @@ import 'package:proyecto/firebase/login.dart';
 import 'package:proyecto/providers/providers.dart';
 import 'package:proyecto/firebase/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -19,8 +18,6 @@ void main() async{
 
   );
 }
-
-
 
 class MyApp extends StatelessWidget {
   

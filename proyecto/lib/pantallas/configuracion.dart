@@ -37,7 +37,7 @@ class _ConfigState  extends State<Config> {
                       ),
                 ]
               ),
-              ElevatedButton(
+              IconButton(
               onPressed: (){
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -51,8 +51,7 @@ class _ConfigState  extends State<Config> {
                   )
                 );
               },
-              child: Text("Modificar usuario"),
-            ),
+              icon: Icon(Icons.account_circle)),
 
             ElevatedButton(
               onPressed: (){
