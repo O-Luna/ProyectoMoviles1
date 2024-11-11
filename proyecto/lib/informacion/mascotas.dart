@@ -33,8 +33,6 @@ const mascotas_perdidas = [
 
   descripcion:'última ubicación conocida'
 
-  
- 
  ),
   Mascotas(
   id:'c2',

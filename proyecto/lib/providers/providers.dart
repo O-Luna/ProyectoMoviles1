@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto/informacion/mascotas.dart';
 import 'package:proyecto/informacion/modelo.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Providers with ChangeNotifier {
   bool _ActivDarkMode = false;
@@ -8,6 +9,9 @@ class Providers with ChangeNotifier {
 
   List<Mascotas> _mascotasList = List.from(infomascotas);
   List<Mascotas> get mascotasList => _mascotasList;
+
+  List<Map<String, dynamic>> _products = [];
+  List<Map<String, dynamic>> get products => _products;
 
   int _currentPageIndex=0;
   int get currentPageIndex => _currentPageIndex;
@@ -47,5 +51,44 @@ class Providers with ChangeNotifier {
       seedColor: const Color.fromARGB(255, 97, 96, 96),
     ),
   );
+
+
+    Future<void> getProducts() async {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('Tus_Mascotas').get();
+    _products = snapshot.docs.map((doc){final data=doc.data() as Map<String, dynamic>; data['id']=doc.id;return data;}).toList();
+    notifyListeners();
+  }
+
+
+  Future<void> deleteProduct(String productId) async {
+  
+    CollectionReference products = FirebaseFirestore.instance.collection('Tus_Mascotas');
+    await products.doc(productId).delete().catchError((error) { print("Failed to delete product: $error"); });
+    _products.removeWhere((product) => product['id'] == productId);
+    notifyListeners();
+  }
+
+  Future<void> addProduct(String name, String imag) async {
+  CollectionReference products = FirebaseFirestore.instance.collection('Tus_Mascotas');
+  await  products.add({
+    'nombre': name,
+    'imagen': imag,
+    
+  });
+  await getProducts();
+ 
+  }
+
+  Future<void> updateProduct(String productId, String newName, String newImag) {
+    CollectionReference products = FirebaseFirestore.instance.collection('Tus_Mascotas');
+    
+    return products.doc(productId).update({
+      'name': newName,
+      'imagen': newImag,
+      
+    })
+      .then((value) => print("Product name updated successfully!"))
+      .catchError((error) => print("Failed to update product name: $error"));
+  }
 }
 

@@ -24,7 +24,6 @@ class DetalleMascota extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Imagen de la mascota
             SizedBox(
               width: double.infinity,
               height: 300,

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:proyecto/informacion/mascotas.dart';
-import 'package:proyecto/informacion/modelo.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proyecto/pantallas/agregar.dart';
-import 'package:proyecto/pantallas/configuracion.dart';
 import 'package:proyecto/pantallas/detalles.dart';
-import 'package:proyecto/pantallas/perdidos.dart';
 import 'package:proyecto/providers/providers.dart';
 
 class Principal extends StatefulWidget {
@@ -16,100 +13,140 @@ class Principal extends StatefulWidget {
 }
 
 class _PrincipalState extends State<Principal> {
-  var currentPageIndex = 0;
-  //List<Mascotas> mascotasList = List.from(infomascotas); 
-  
- //color: provider.isDarkMode ? Colors.grey: Colors.white,
+  @override
+  void initState() {
+    super.initState();
+
+    Provider.of<Providers>(context, listen: false).getProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<Providers>(context);
     return Scaffold(
-      body:  
-      
-      ReorderableListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        children: [
-          for (int index = 0; index < provider.mascotasList.length; index++)    
-          Container( 
-            key: ValueKey(provider.mascotasList[index]),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetalleMascota(
-                        mascota: provider.mascotasList[index], 
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: provider.isDarkMode ? Colors.grey: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 110,
-                        height: 115,
+      body: Consumer<Providers>(
+        builder: (context, provider, child) {
+          return ReorderableListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            children: [
+              for (int index = 0; index < provider.products.length; index++)
+                Container(
+                  key: ValueKey(provider.products[index]['id']),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: InkWell(
+                      onTap: () {
+                       /* Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetalleMascota(
+                              mascota: provider.products[index],
+                            ),
+                          ),
+                        );*/
+                      },
+                      child: Container(
+                        height: 120,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            bottomLeft: Radius.circular(20),
-                          ),
-                          image: DecorationImage(
-                            image: NetworkImage(provider.mascotasList[index].imageUrl),
-                            fit: BoxFit.cover,
-                          ),
+                          color: provider.isDarkMode ? Colors.grey : Colors.white,
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                provider.mascotasList[index].title,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black87,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 110,
+                              height: 115,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  bottomLeft: Radius.circular(20),
+                                ),
+                                image: DecorationImage(
+                                  image: NetworkImage(provider.products[index]['imagen'] ?? 
+                                    'https://via.placeholder.com/110x115'),
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                size: 20,
-                                color: Colors.grey,
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      provider.products[index]['nombre'] ?? 'Sin nombre',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(
+                                            Icons.edit,
+                                            size: 20,
+                                            color: Colors.grey,
+                                          ),
+                                          onPressed: () {
+                                           /* 
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => Agregar(
+                                                  editar: 1,
+                                                  id: provider.products[index]['id'],
+                                                ),
+                                              ),
+                                            );*/
+                                          },
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(
+                                            Icons.delete,
+                                            size: 20,
+                                            color: Colors.grey,
+                                          ),
+                                          onPressed: () {
+                                            provider.deleteProduct(provider.products[index]['id']);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ),
-          )
-      
-        ],
-        onReorder: (int oldIndex, int newIndex) {
-          provider.reorderMascotas(oldIndex, newIndex);
+                )
+            ],
+            onReorder: (int oldIndex, int newIndex) async {
+              if (newIndex > oldIndex) {
+                newIndex -= 1;
+              }    
+              final CollectionReference mascotas = 
+              FirebaseFirestore.instance.collection('Tus_Mascotas');
+
+              final item = provider.products.removeAt(oldIndex);
+              provider.products.insert(newIndex, item);
+              provider.notifyListeners();
+            },
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Agregar()),
+            MaterialPageRoute(builder: (context) => Add(editar: 0, id: "0")),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

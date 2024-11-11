@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
       builder: (context, provider, child) {
         return MaterialApp(
           theme: provider.currentTheme,
-         // home: InicioSesion(),
          home: AuthGate(),
         );
       },
