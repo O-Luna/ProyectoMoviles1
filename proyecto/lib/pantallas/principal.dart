@@ -19,7 +19,6 @@ class _PrincipalState extends State<Principal> {
 
     Provider.of<Providers>(context, listen: false).getProducts();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,14 +34,14 @@ class _PrincipalState extends State<Principal> {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: InkWell(
                       onTap: () {
-                       /* Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DetalleMascota(
+                            builder: (context) => Detalles(
                               mascota: provider.products[index],
                             ),
                           ),
-                        );*/
+                        );
                       },
                       child: Container(
                         height: 120,
@@ -90,16 +89,16 @@ class _PrincipalState extends State<Principal> {
                                             color: Colors.grey,
                                           ),
                                           onPressed: () {
-                                           /* 
+                                           
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) => Agregar(
+                                                builder: (context) => Add(
                                                   editar: 1,
                                                   id: provider.products[index]['id'],
                                                 ),
                                               ),
-                                            );*/
+                                            );
                                           },
                                         ),
                                         IconButton(

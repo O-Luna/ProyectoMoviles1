@@ -13,6 +13,12 @@ class Providers with ChangeNotifier {
   List<Map<String, dynamic>> _products = [];
   List<Map<String, dynamic>> get products => _products;
 
+  List<Map<String, dynamic>> _detalles = [];
+  List<Map<String, dynamic>> get detalles => _detalles;
+
+  List<Map<String, dynamic>> _perdidas = [];
+  List<Map<String, dynamic>> get perdidas => _perdidas;
+
   int _currentPageIndex=0;
   int get currentPageIndex => _currentPageIndex;
   void fondo() {
@@ -83,12 +89,142 @@ class Providers with ChangeNotifier {
     CollectionReference products = FirebaseFirestore.instance.collection('Tus_Mascotas');
     
     return products.doc(productId).update({
-      'name': newName,
+      'nombre': newName,
       'imagen': newImag,
       
     })
       .then((value) => print("Product name updated successfully!"))
       .catchError((error) => print("Failed to update product name: $error"));
   }
+
+/*
+Future<void> getProducts2() async {
+  QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('Detalles').get();
+  _detalles = snapshot.docs.map((doc) { 
+    final data = doc.data() as Map<String, dynamic>; 
+    data['id'] = doc.id;
+    return data;
+  }).toList();  
+  notifyListeners();
+}*/Future<void> getProducts2() async {
+  FirebaseFirestore.instance
+    .collection('Detalles')
+    .snapshots()
+    .listen((snapshot) {
+      _detalles = snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+      notifyListeners();
+    });
+}
+
+
+
+
+  Future<void> deleteProduct2(String productId) async {
+  
+    CollectionReference products = FirebaseFirestore.instance.collection('Detalles');
+    await products.doc(productId).delete().catchError((error) { print("Failed to delete product: $error"); });
+    _products.removeWhere((product) => product['id'] == productId);
+    notifyListeners();
+  }
+
+  Future<void> addProduct2(String name, String imag, String description,String ubi) async {
+  CollectionReference products = FirebaseFirestore.instance.collection('Detalles');
+  await  products.add({
+    'descripcion': description,
+    'imagen': imag,
+    'nombre': name,
+    'ubicacion': ubi,
+    
+  });
+ 
+  }
+
+  Future<void> updateProduct2(String productId, String newName, String newImag) {
+    CollectionReference products = FirebaseFirestore.instance.collection('Detalles');
+    
+    return products.doc(productId).update({
+      'nombre': newName,
+      'imagen': newImag,
+      
+    })
+      .then((value) => print("Product name updated successfully!"))
+      .catchError((error) => print("Failed to update product name: $error"));
+  }
+
+
+
+  Future<void> Perdido(Map<String, dynamic> mascota) async {
+    try {
+      CollectionReference detalles = FirebaseFirestore.instance.collection('Detalles');
+      /**Asignarle los valores y agregar unos nuevos también  */
+      await detalles.add({
+        'nombre': mascota['nombre'],
+        'imagen': mascota['imagen'],
+        'descripcion': mascota['descripcion'] ?? 'Sin descripción',
+        'ubicacion': mascota['ubicacion'] ?? 'Ubicación no especificada',
+        'estado': 'perdido',
+        'fecha_reporte': DateTime.now().toString(),/**Así bien perrón */
+      });
+
+      await getProducts2();
+      
+    } catch (error) {
+      print("Error al reportar mascota perdida: $error");
+      rethrow;
+    }
+  }
+
+  
+  Future<void> reportarEncontrado(String mascotaId) async {
+    try {
+
+      await FirebaseFirestore.instance
+          .collection('Detalles')
+          .doc(mascotaId)
+          .delete();
+      
+      _detalles.removeWhere((mascota) => mascota['id'] == mascotaId);
+      notifyListeners();
+
+      // await FirebaseFirestore.instance.collection('Encontrados').add({});
+    } catch (error) {
+      print("Error al reportar mascota encontrada: $error");
+      rethrow;
+    }
+  }
+
+
+  Future<void> getProducts3() async {//para perdidos obtener el id y eso
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('Detalles')
+          .where('estado', isEqualTo: 'perdido')
+          .get();
+          
+      _detalles = snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+      
+      notifyListeners();
+    } catch (error) {
+      print("Error al obtener mascotas perdidas: $error");
+      _detalles = [];
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteProduct3(String productId) async {
+    CollectionReference products = FirebaseFirestore.instance.collection('Tus_Mascotas');
+    await products.doc(productId).delete().catchError((error) { print("Failed to delete product: $error"); });
+    _products.removeWhere((product) => product['id'] == productId);
+    notifyListeners();
+  }
+
 }
 
