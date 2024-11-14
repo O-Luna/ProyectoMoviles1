@@ -13,6 +13,11 @@ class Principal extends StatefulWidget {
 }
 
 class _PrincipalState extends State<Principal> {
+
+  Future<void>_refresh()  async{
+     await Provider.of<Providers>(context, listen: false).getProducts();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -24,7 +29,9 @@ class _PrincipalState extends State<Principal> {
     return Scaffold(
       body: Consumer<Providers>(
         builder: (context, provider, child) {
-          return ReorderableListView(
+          return RefreshIndicator(
+            onRefresh: _refresh,
+            child: ReorderableListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             children: [
               for (int index = 0; index < provider.products.length; index++)
@@ -135,8 +142,10 @@ class _PrincipalState extends State<Principal> {
               provider.products.insert(newIndex, item);
               provider.notifyListeners();
             },
+            )
           );
         },
+      
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

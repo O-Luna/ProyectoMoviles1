@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proyecto/informacion/mascotas.dart';
 import 'package:proyecto/informacion/modelo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:proyecto/pantallas/encontrados.dart';
 
 class Providers with ChangeNotifier {
   bool _ActivDarkMode = false;
@@ -97,16 +98,7 @@ class Providers with ChangeNotifier {
       .catchError((error) => print("Failed to update product name: $error"));
   }
 
-/*
 Future<void> getProducts2() async {
-  QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('Detalles').get();
-  _detalles = snapshot.docs.map((doc) { 
-    final data = doc.data() as Map<String, dynamic>; 
-    data['id'] = doc.id;
-    return data;
-  }).toList();  
-  notifyListeners();
-}*/Future<void> getProducts2() async {
   FirebaseFirestore.instance
     .collection('Detalles')
     .snapshots()
@@ -179,23 +171,19 @@ Future<void> getProducts2() async {
   }
 
   
-  Future<void> reportarEncontrado(String mascotaId) async {
-    try {
-
-      await FirebaseFirestore.instance
-          .collection('Detalles')
-          .doc(mascotaId)
-          .delete();
-      
-      _detalles.removeWhere((mascota) => mascota['id'] == mascotaId);
-      notifyListeners();
-
-      // await FirebaseFirestore.instance.collection('Encontrados').add({});
-    } catch (error) {
-      print("Error al reportar mascota encontrada: $error");
-      rethrow;
-    }
+Future<void> reportarEncontrado(String mascotaId) async {
+  try {
+    final doc = await FirebaseFirestore.instance.collection('Detalles').doc(mascotaId).get();
+    await FirebaseFirestore.instance.collection('Encontrados').add({
+      ...doc.data()!,
+      'fecha_encuentro': DateTime.now().toString(),
+    });
+    await doc.reference.delete();
+  } catch (error) {
+    print("Error al reportar mascota encontrada: $error");
+    rethrow;
   }
+}
 
 
   Future<void> getProducts3() async {//para perdidos obtener el id y eso
@@ -226,5 +214,19 @@ Future<void> getProducts2() async {
     notifyListeners();
   }
 
+Future<void> getEncontrados() async {
+  try {
+    FirebaseFirestore.instance
+        .collection('Encontrados')
+        .snapshots()
+        .listen((snapshot) {
+      _detalles = snapshot.docs.map((doc) => {...doc.data(), 'id': doc.id}).toList();
+      notifyListeners();
+    });
+  } catch (error) {
+    print("Error al obtener encontrados: $error");
+    _detalles = [];
+    notifyListeners();
+  }
+  }
 }
-

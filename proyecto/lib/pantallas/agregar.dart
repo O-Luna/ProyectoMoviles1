@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+//import 'package:proyecto/pantallas/camara.dart';
 import 'package:proyecto/pantallas/principal.dart';
 import 'package:proyecto/providers/providers.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'dart:io';
 
 class Add extends StatefulWidget {
   const Add({super.key, required this.editar, required this.id});
@@ -15,9 +20,10 @@ class Add extends StatefulWidget {
 class _AddState extends State<Add> {
   final TextEditingController nombre = TextEditingController();
   final TextEditingController imagg = TextEditingController();
+  @override 
 
-  @override
-  @override
+
+
   Widget build(BuildContext context) {
     final productsProvider = Provider.of<Providers>(context, listen: false);
     productsProvider.getProducts();
@@ -44,15 +50,29 @@ class _AddState extends State<Add> {
                       ),
                     ),
                     const Padding(padding: EdgeInsets.fromLTRB(0, 15, 0, 0)),
-                    TextField(
-                      controller: imagg,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        labelText: 'imagen',
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
+                    Column(
+                  //   children: [
+                  //     IconButton(
+                  //       icon: const Icon(
+                  //       Icons.image,
+                  //       size: 20,
+                  //        color: Colors.grey,
+                  //       ),
+                  //       onPressed: () {
+                                           
+                  //                           Navigator.push(
+                  //                             context,
+                  //                             MaterialPageRoute(
+                  //                               builder: (context) => CameraScreen(
+
+                  //                               ),
+                  //                             ),
+                  //                           );
+                  //                         },
+                  //                       ),
+            
+                   // ],
+      ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

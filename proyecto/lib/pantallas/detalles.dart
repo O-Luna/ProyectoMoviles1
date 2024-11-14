@@ -15,6 +15,7 @@ class Detalles extends StatefulWidget {
 }
 
 class _DetallesState extends State<Detalles> {
+
   @override
   void initState() {
     super.initState();
@@ -87,6 +88,7 @@ class _DetallesState extends State<Detalles> {
                           },
                           child: Text(
                             estaPerdida ? '¡Mascota Encontrada!' : 'Reportar como Perdido',
+                            
                   ),
                         ),
                       ),
