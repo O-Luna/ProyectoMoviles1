@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto/informacion/mascotas.dart';
-import 'package:proyecto/informacion/modelo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proyecto/pantallas/encontrados.dart';
 
 class Providers with ChangeNotifier {
   bool _ActivDarkMode = false;
   bool get isDarkMode => _ActivDarkMode;
-
-  List<Mascotas> _mascotasList = List.from(infomascotas);
-  List<Mascotas> get mascotasList => _mascotasList;
 
   List<Map<String, dynamic>> _products = [];
   List<Map<String, dynamic>> get products => _products;
@@ -36,8 +31,8 @@ class Providers with ChangeNotifier {
     if (newIndex > oldIndex) {
       newIndex -= 1;
     }
-    final item = _mascotasList.removeAt(oldIndex);
-    _mascotasList.insert(newIndex, item);
+    final item = _products.removeAt(oldIndex);
+    _products.insert(newIndex, item);
     notifyListeners();
   }
 
@@ -59,13 +54,11 @@ class Providers with ChangeNotifier {
     ),
   );
 
-
     Future<void> getProducts() async {
     QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('Tus_Mascotas').get();
     _products = snapshot.docs.map((doc){final data=doc.data() as Map<String, dynamic>; data['id']=doc.id;return data;}).toList();
     notifyListeners();
   }
-
 
   Future<void> deleteProduct(String productId) async {
   
@@ -86,6 +79,10 @@ class Providers with ChangeNotifier {
  
   }
 
+    Future<void> addtoken(String tk) async {
+  CollectionReference token = FirebaseFirestore.instance.collection('tokens');
+  await  token.add({ 'token': tk, }); }
+
   Future<void> updateProduct(String productId, String newName, String newImag) {
     CollectionReference products = FirebaseFirestore.instance.collection('Tus_Mascotas');
     
@@ -102,8 +99,7 @@ Future<void> getProducts2() async {
   FirebaseFirestore.instance
     .collection('Detalles')
     .snapshots()
-    .listen((snapshot) {
-      _detalles = snapshot.docs.map((doc) {
+    .listen((snapshot) {_detalles = snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         data['id'] = doc.id;
         return data;
@@ -111,9 +107,6 @@ Future<void> getProducts2() async {
       notifyListeners();
     });
 }
-
-
-
 
   Future<void> deleteProduct2(String productId) async {
   
@@ -146,7 +139,6 @@ Future<void> getProducts2() async {
       .then((value) => print("Product name updated successfully!"))
       .catchError((error) => print("Failed to update product name: $error"));
   }
-
 
 
   Future<void> Perdido(Map<String, dynamic> mascota) async {
@@ -214,12 +206,15 @@ Future<void> reportarEncontrado(String mascotaId) async {
     notifyListeners();
   }
 
+   Future<void> deleteEncontrados(String productId) async {
+    await FirebaseFirestore.instance.collection('Encontrados').doc(productId).delete();
+    _detalles.removeWhere((product) => product['id'] == productId);
+    notifyListeners();
+  }
+
 Future<void> getEncontrados() async {
   try {
-    FirebaseFirestore.instance
-        .collection('Encontrados')
-        .snapshots()
-        .listen((snapshot) {
+    FirebaseFirestore.instance.collection('Encontrados').snapshots().listen((snapshot) {
       _detalles = snapshot.docs.map((doc) => {...doc.data(), 'id': doc.id}).toList();
       notifyListeners();
     });

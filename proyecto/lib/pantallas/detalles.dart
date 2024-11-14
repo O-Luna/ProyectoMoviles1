@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proyecto/providers/providers.dart';
+import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 
 class Detalles extends StatefulWidget {
   final Map<String, dynamic> mascota;
@@ -29,7 +30,9 @@ class _DetallesState extends State<Detalles> {
       ),
       body: Consumer<Providers>(
         builder: (context, provider, child) {/*Buscar en la lista un animal que tenga el mismo nombre*/ 
-        bool estaPerdida = provider.detalles.any((m) => m['id'] == widget.mascota['id']);/**Para mostrar en el botón dependiendo del estado */
+        bool estaPerdida = provider.detalles.any((m) => m['id'] == widget.mascota['id']);/**verificar si hay algun detalle que cumple la condición    */
+          /* True si si se encuentra un elemento igual*/
+           
           final detallesMascota = provider.detalles.firstWhere(
             (detalle) => detalle['nombre'] == widget.mascota['nombre'],
             orElse: () => {}, /* Si no hay descripción del animal se devuelve un mapa vacio(evitar errores)*/
@@ -69,7 +72,27 @@ class _DetallesState extends State<Detalles> {
                           detallesMascota['ubicacion'],
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 450,
+                          height:300, 
+                    child: OSMViewer(
+                      controller: SimpleMapController(
+                        initPosition: GeoPoint(
+                            latitude: 47.4358055,
+                            longitude: 8.4737324,
+                        ),
+                      markerHome: const MarkerIcon(
+                          icon: Icon(Icons.home),
+                        ),
+                      ),
+                      zoomOption: const ZoomOption(
+                      initZoom: 16,
+                      minZoomLevel: 11,
+                      )
+                    ),
+                  ),
+                    const SizedBox(height: 8),
                       ],
                       Center(
                         child: ElevatedButton(
@@ -86,7 +109,8 @@ class _DetallesState extends State<Detalles> {
                                 await provider.Perdido(mascotaData);
                             }
                           },
-                          child: Text(
+                          child: 
+                          Text(
                             estaPerdida ? '¡Mascota Encontrada!' : 'Reportar como Perdido',
                             
                   ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:proyecto/pantallas/inicio_sesion.dart';
 import 'package:proyecto/firebase/login.dart';
 import 'package:proyecto/providers/providers.dart';
 import 'package:proyecto/firebase/firebase_options.dart';

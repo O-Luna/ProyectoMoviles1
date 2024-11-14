@@ -1,4 +1,6 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proyecto/pantallas/agregar.dart';
@@ -12,18 +14,24 @@ class Principal extends StatefulWidget {
   State<Principal> createState() => _PrincipalState();
 }
 
+
 class _PrincipalState extends State<Principal> {
+  
 
   Future<void>_refresh()  async{
-     await Provider.of<Providers>(context, listen: false).getProducts();
+      await Provider.of<Providers>(context, listen: false).getProducts();    
+  //     final fcmToken = await FirebaseMessaging.instance.getToken();
+  //    if (fcmToken != null) {
+  //   Provider.of<Providers>(context, listen: false).addtoken(fcmToken);
+  // }
   }
 
   @override
   void initState() {
     super.initState();
-
     Provider.of<Providers>(context, listen: false).getProducts();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +104,7 @@ class _PrincipalState extends State<Principal> {
                                             color: Colors.grey,
                                           ),
                                           onPressed: () {
+
                                            
                                             Navigator.push(
                                               context,
@@ -149,6 +158,7 @@ class _PrincipalState extends State<Principal> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          //_refresh();
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Add(editar: 0, id: "0")),
