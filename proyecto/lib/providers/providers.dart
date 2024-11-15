@@ -155,9 +155,9 @@ Future<void> getperdidos() async {
 
   Future<void> Perdido(Map<String, dynamic> mascota) async {
     try {
-      CollectionReference detalles = FirebaseFirestore.instance.collection('Detalles');
+      CollectionReference perdidos = FirebaseFirestore.instance.collection('perdidos');
       /**Asignarle los valores y agregar unos nuevos también  */
-      await detalles.add({
+      await perdidos.add({
         'nombre': mascota['nombre'],
         'imagen': mascota['imagen'],
         'descripcion': mascota['descripcion'] ?? 'Sin descripción',
@@ -166,7 +166,7 @@ Future<void> getperdidos() async {
         'fecha_reporte': DateTime.now().toString(),/**Así bien perrón */
       });
 
-      await getProducts2();
+      await getperdidos();
       
     } catch (error) {
       print("Error al reportar mascota perdida: $error");
@@ -177,12 +177,14 @@ Future<void> getperdidos() async {
   
 Future<void> reportarEncontrado(String mascotaId) async {
   try {
-    final doc = await FirebaseFirestore.instance.collection('Detalles').doc(mascotaId).get();
+    final doc = await FirebaseFirestore.instance.collection('perdidos').doc(mascotaId).get();
+
     await FirebaseFirestore.instance.collection('Encontrados').add({
       ...doc.data()!,
       'fecha_encuentro': DateTime.now().toString(),
     });
     await doc.reference.delete();
+    notifyListeners();
   } catch (error) {
     print("Error al reportar mascota encontrada: $error");
     rethrow;

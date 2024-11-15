@@ -30,9 +30,9 @@ class _PerdidosState extends State<Perdidos> {
             onRefresh: _refresh,
             child: ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          itemCount: provider.detalles.length,
+          itemCount: provider.perdidas.length,
           itemBuilder: (context, index) {
-            final mascota = provider.detalles[index];
+            final mascota = provider.perdidas[index];
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: InkWell(
