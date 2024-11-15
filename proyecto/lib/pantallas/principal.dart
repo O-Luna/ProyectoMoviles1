@@ -104,6 +104,7 @@ class _PrincipalState extends State<Principal> {
                                             color: Colors.grey,
                                           ),
                                           onPressed: () {
+                                            _refresh();
 
                                            
                                             Navigator.push(
@@ -114,6 +115,7 @@ class _PrincipalState extends State<Principal> {
                                                   id: provider.products[index]['id'],
                                                 ),
                                               ),
+                                              
                                             );
                                           },
                                         ),

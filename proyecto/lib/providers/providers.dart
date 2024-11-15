@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proyecto/pantallas/encontrados.dart';
-import 'package:proyecto/pantallas/perdidos.dart';
+import 'package:proyecto/pantallas/configuracion.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Providers with ChangeNotifier {
   bool _ActivDarkMode = false;
@@ -18,6 +21,9 @@ class Providers with ChangeNotifier {
 
   List<Map<String, dynamic>> _perdidas = [];
   List<Map<String, dynamic>> get perdidas => _perdidas;
+
+ // List<Map<String, dynamic>> _perdidas = [];
+ //  List<Map<String, dynamic>> get perdidas => _perdidas;
 
   int _currentPageIndex=0;
   int get currentPageIndex => _currentPageIndex;
@@ -163,7 +169,11 @@ Future<void> getperdidos() async {
         'imagen': mascota['imagen'],
         'descripcion': mascota['descripcion'] ?? 'Sin descripción',
         'ubicacion': mascota['ubicacion'] ?? 'Ubicación no especificada',
+        'latitude': mascota['longitude'],
+        'longitude':mascota['longitude'],
+
         'estado': 'perdido',
+
         'fecha_reporte': DateTime.now().toString(),/**Así bien perrón */
       });
 
@@ -174,7 +184,6 @@ Future<void> getperdidos() async {
       rethrow;
     }
   }
-
   
 Future<void> reportarEncontrado(String mascotaId) async {
   try {
@@ -235,4 +244,18 @@ Future<void> getEncontrados() async {
     notifyListeners();
   }
   }
+
+Future<void> getFotos() async {
+  try {
+    FirebaseFirestore.instance.collection('Fotos').snapshots().listen((snapshot) {
+      _detalles = snapshot.docs.map((doc) => {...doc.data(), 'id': doc.id}).toList();
+      notifyListeners();
+    });
+  } catch (error) {
+    print("Error al obtener encontrados: $error");
+    _detalles = [];
+    notifyListeners();
+  }
+  }
+
 }

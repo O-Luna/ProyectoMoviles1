@@ -49,6 +49,7 @@ dependencies:
   device_info_plus: ^11.1.1
   firebase_messaging: ^15.1.5
   firebase_analytics: ^11.3.5
+  firebase_storage: ^12.3.6
 
 dev_dependencies:
   flutter_test:

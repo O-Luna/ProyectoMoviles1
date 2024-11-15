@@ -78,8 +78,10 @@ class _DetallesState extends State<Detalles> {
                     child: OSMViewer(
                       controller: SimpleMapController(
                         initPosition: GeoPoint(
-                            latitude: 47.4358055,
-                            longitude: 8.4737324,
+                         latitude:  detallesMascota['latitude'],
+                            //latitude: 47.4358055,
+                           // longitude: 8.4737324,
+                           longitude: detallesMascota['longitude']
                         ),
                       markerHome: const MarkerIcon(
                           icon: Icon(Icons.home),
@@ -103,15 +105,16 @@ class _DetallesState extends State<Detalles> {
                                 'nombre': widget.mascota['nombre'],
                                 'imagen': widget.mascota['imagen'],
                                 'descripcion': 'Mascota reportada como perdida',
-                                'ubicacion': 'Última ubicación vista', 
+                               // 'ubicacion': 'Última ubicación vista', 
+                               //  'latitude' :,
+                               //  'longitude':,
                               };
                                 await provider.Perdido(mascotaData);
                             }
                           },
                           child: 
                           Text(
-                            estaPerdida ? '¡Mascota Encontrada!' : 'Reportar como Perdido',
-                            
+                            estaPerdida ? '¡Mascota Encontrada!' : 'Reportar como Perdido',                           
                   ),
                         ),
                       ),

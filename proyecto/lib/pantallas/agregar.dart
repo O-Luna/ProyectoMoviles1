@@ -20,6 +20,7 @@ class Add extends StatefulWidget {
 class _AddState extends State<Add> {
   final TextEditingController nombre = TextEditingController();
   final TextEditingController imagg = TextEditingController();
+  
   @override 
 
 
@@ -49,30 +50,15 @@ class _AddState extends State<Add> {
                         border: OutlineInputBorder(),
                       ),
                     ),
-                    const Padding(padding: EdgeInsets.fromLTRB(0, 15, 0, 0)),
-                    Column(
-                  //   children: [
-                  //     IconButton(
-                  //       icon: const Icon(
-                  //       Icons.image,
-                  //       size: 20,
-                  //        color: Colors.grey,
-                  //       ),
-                  //       onPressed: () {
-                                           
-                  //                           Navigator.push(
-                  //                             context,
-                  //                             MaterialPageRoute(
-                  //                               builder: (context) => CameraScreen(
-
-                  //                               ),
-                  //                             ),
-                  //                           );
-                  //                         },
-                  //                       ),
-            
-                   // ],
-      ),
+                    TextField(
+                      controller: imagg,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        labelText: 'imag',
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
