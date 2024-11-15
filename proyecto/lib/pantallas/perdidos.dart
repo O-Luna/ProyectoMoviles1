@@ -17,7 +17,7 @@ class _PerdidosState extends State<Perdidos> {
   @override
   void initState() {
     super.initState();
-    Provider.of<Providers>(context, listen: false).getProducts2();
+    Provider.of<Providers>(context, listen: false).getperdidos();
   }
 
   @override
@@ -30,9 +30,9 @@ class _PerdidosState extends State<Perdidos> {
             onRefresh: _refresh,
             child: ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          itemCount: provider.perdidas.length,
+          itemCount: provider.Perdidos.length,
           itemBuilder: (context, index) {
-            final mascota = provider.perdidas[index];
+            final mascota = provider.Perdidos[index];
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: InkWell(

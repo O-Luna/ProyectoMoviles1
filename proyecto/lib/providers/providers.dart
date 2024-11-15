@@ -110,11 +110,12 @@ Future<void> getProducts2() async {
       notifyListeners();
     });
 }
+
 Future<void> getperdidos() async {
   FirebaseFirestore.instance
     .collection('perdidos')
     .snapshots()
-    .listen((snapshot) {_perdidas = snapshot.docs.map((doc) {
+    .listen((snapshot) {_perdidos = snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         data['id'] = doc.id;
         return data;
@@ -178,20 +179,16 @@ Future<void> getperdidos() async {
 Future<void> reportarEncontrado(String mascotaId) async {
   try {
     final doc = await FirebaseFirestore.instance.collection('perdidos').doc(mascotaId).get();
-
     await FirebaseFirestore.instance.collection('Encontrados').add({
       ...doc.data()!,
       'fecha_encuentro': DateTime.now().toString(),
     });
     await doc.reference.delete();
-    notifyListeners();
   } catch (error) {
     print("Error al reportar mascota encontrada: $error");
     rethrow;
   }
 }
-
-
   Future<void> getProducts3() async {//para perdidos obtener el id y eso
     try {
       QuerySnapshot snapshot = await FirebaseFirestore.instance
