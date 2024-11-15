@@ -91,7 +91,7 @@ class _EncontradosState extends State<Encontrados> {
                                             color: Colors.grey,
                                           ),
                                           onPressed: () {
-                                            provider.deleteEncontrados(provider.products[index]['id']);
+                                            provider.deleteEncontrados(mascota['id']);
                                           },
                                         ),
                                       ],

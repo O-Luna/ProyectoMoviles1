@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proyecto/firebase/login.dart';
@@ -9,6 +10,9 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  
+  await FirebaseMessaging.instance.requestPermission();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(
     ChangeNotifierProvider(
       create: (context) => Providers(),
@@ -17,7 +21,12 @@ void main() async{
 
   );
 }
-
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Title del mensaje: ${message.notification?.title}");
+  print("Body del mensaje: ${message.notification?.body}");
+  print("ID del mensaje: ${message.messageId}");
+}
 class MyApp extends StatelessWidget {
   
   @override

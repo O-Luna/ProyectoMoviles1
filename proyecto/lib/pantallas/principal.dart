@@ -20,10 +20,10 @@ class _PrincipalState extends State<Principal> {
 
   Future<void>_refresh()  async{
       await Provider.of<Providers>(context, listen: false).getProducts();    
-  //     final fcmToken = await FirebaseMessaging.instance.getToken();
-  //    if (fcmToken != null) {
-  //   Provider.of<Providers>(context, listen: false).addtoken(fcmToken);
-  // }
+      final fcmToken = await FirebaseMessaging.instance.getToken();
+     if (fcmToken != null) {
+    Provider.of<Providers>(context, listen: false).addtoken(fcmToken);
+  }
   }
 
   @override
@@ -157,8 +157,11 @@ class _PrincipalState extends State<Principal> {
       
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //_refresh();
+        onPressed: () async {
+          _refresh();
+          final fcmToken = await FirebaseMessaging.instance.getToken();
+              print("Token conseguido y copiado al portapapeles: ${fcmToken}");
+              await Clipboard.setData(ClipboardData(text: "$fcmToken"));
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Add(editar: 0, id: "0")),

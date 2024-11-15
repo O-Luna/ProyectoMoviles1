@@ -30,11 +30,11 @@ class _DetallesState extends State<Detalles> {
       ),
       body: Consumer<Providers>(
         builder: (context, provider, child) {/*Buscar en la lista un animal que tenga el mismo nombre*/ 
-        bool estaPerdida = provider.detalles.any((m) => m['id'] == widget.mascota['id']);/**verificar si hay algun detalle que cumple la condición    */
+        bool estaPerdida = provider.perdidas.any((m) => m['id'] == widget.mascota['id']);/**verificar si hay algun detalle que cumple la condición    */
           /* True si si se encuentra un elemento igual*/
            
-          final detallesMascota = provider.detalles.firstWhere(
-            (detalle) => detalle['nombre'] == widget.mascota['nombre'],
+          final detallesMascota = provider.perdidas.firstWhere(
+            (perdidas) => perdidas['nombre'] == widget.mascota['nombre'],
             orElse: () => {}, /* Si no hay descripción del animal se devuelve un mapa vacio(evitar errores)*/
           );
           return SingleChildScrollView(

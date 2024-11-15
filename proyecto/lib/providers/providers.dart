@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proyecto/pantallas/encontrados.dart';
+import 'package:proyecto/pantallas/perdidos.dart';
 
 class Providers with ChangeNotifier {
   bool _ActivDarkMode = false;
@@ -11,6 +12,9 @@ class Providers with ChangeNotifier {
 
   List<Map<String, dynamic>> _detalles = [];
   List<Map<String, dynamic>> get detalles => _detalles;
+
+  List<Map<String, dynamic>> _perdidos = [];
+  List<Map<String, dynamic>> get Perdidos => _perdidos;
 
   List<Map<String, dynamic>> _perdidas = [];
   List<Map<String, dynamic>> get perdidas => _perdidas;
@@ -37,7 +41,6 @@ class Providers with ChangeNotifier {
   }
 
   ThemeData get currentTheme => _ActivDarkMode ? _darkTheme : _lightTheme;
-
   final _lightTheme = ThemeData(
     useMaterial3: true,
     colorScheme: ColorScheme.fromSeed(
@@ -61,7 +64,6 @@ class Providers with ChangeNotifier {
   }
 
   Future<void> deleteProduct(String productId) async {
-  
     CollectionReference products = FirebaseFirestore.instance.collection('Tus_Mascotas');
     await products.doc(productId).delete().catchError((error) { print("Failed to delete product: $error"); });
     _products.removeWhere((product) => product['id'] == productId);
@@ -73,19 +75,20 @@ class Providers with ChangeNotifier {
   await  products.add({
     'nombre': name,
     'imagen': imag,
-    
   });
   await getProducts();
  
   }
-
     Future<void> addtoken(String tk) async {
-  CollectionReference token = FirebaseFirestore.instance.collection('tokens');
-  await  token.add({ 'token': tk, }); }
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('tokens').where('token',isEqualTo: tk).get(); /**c */
+      if(querySnapshot.docs.isEmpty){
+        CollectionReference token = FirebaseFirestore.instance.collection('tokens');
+        await  token.add({ 'token': tk, }); }
+
+  }
 
   Future<void> updateProduct(String productId, String newName, String newImag) {
     CollectionReference products = FirebaseFirestore.instance.collection('Tus_Mascotas');
-    
     return products.doc(productId).update({
       'nombre': newName,
       'imagen': newImag,
@@ -107,9 +110,20 @@ Future<void> getProducts2() async {
       notifyListeners();
     });
 }
+Future<void> getperdidos() async {
+  FirebaseFirestore.instance
+    .collection('perdidos')
+    .snapshots()
+    .listen((snapshot) {_perdidas = snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
+      }).toList();
+      notifyListeners();
+    });
+}
 
   Future<void> deleteProduct2(String productId) async {
-  
     CollectionReference products = FirebaseFirestore.instance.collection('Detalles');
     await products.doc(productId).delete().catchError((error) { print("Failed to delete product: $error"); });
     _products.removeWhere((product) => product['id'] == productId);
@@ -125,9 +139,7 @@ Future<void> getProducts2() async {
     'ubicacion': ubi,
     
   });
- 
   }
-
   Future<void> updateProduct2(String productId, String newName, String newImag) {
     CollectionReference products = FirebaseFirestore.instance.collection('Detalles');
     
