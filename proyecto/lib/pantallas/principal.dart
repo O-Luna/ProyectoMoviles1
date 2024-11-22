@@ -147,7 +147,7 @@ class _PrincipalState extends State<Principal> {
                 newIndex -= 1;
               }    
               final CollectionReference mascotas = 
-              FirebaseFirestore.instance.collection('Tus_Mascotas');
+              FirebaseFirestore.instance.collection('Mascotas');
 
               final item = provider.products.removeAt(oldIndex);
               provider.products.insert(newIndex, item);
