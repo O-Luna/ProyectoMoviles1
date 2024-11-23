@@ -1,8 +1,10 @@
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:proyecto/pantallas/encontrados.dart';
 import 'package:proyecto/pantallas/configuracion.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,6 +12,16 @@ import 'package:firebase_storage/firebase_storage.dart';
 class Providers with ChangeNotifier {
   bool _ActivDarkMode = false;
   bool get isDarkMode => _ActivDarkMode;
+
+  File? _selectedImage;
+  File? get selectedImage => _selectedImage;
+
+  String? _currentImagePath;
+  String? get currentImagePath => _currentImagePath;
+
+  File? _selectedImage2;
+  File? get selectedImage2 => _selectedImage2;
+ 
 
   List<Map<String, dynamic>> _products = [];
   List<Map<String, dynamic>> get products => _products;
@@ -22,6 +34,9 @@ class Providers with ChangeNotifier {
 
   List<Map<String, dynamic>> _perdidas = [];
   List<Map<String, dynamic>> get perdidas => _perdidas;
+
+    List<Map<String, dynamic>> _fotos = [];
+  List<Map<String, dynamic>> get fotos => _fotos;
 
 
   int _currentPageIndex=0;
@@ -75,20 +90,20 @@ class Providers with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addProduct(String name, String imag, /*String estado,String descipcion,Float latitud, Float longitud*/ ) async {
+  Future<void> addProduct(String name, String imag, String descipcion, ) async {
   CollectionReference products = FirebaseFirestore.instance.collection('Mascotas');
   await  products.add({
     'nombre': name,
     'imagen': imag,
-    //'descipcion': descipcion,
-    //'estado': estado,
-    //'latitud': latitud,
-    //'longitud': longitud,
+    'descipcion': descipcion,
+    'latitud': 4.6097100, 
+    'longitud': -74.0817500,
+
   });
 
   await getProducts();
- 
   }
+
     Future<void> addtoken(String tk) async {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('tokens').where('token',isEqualTo: tk).get(); /**c */
       if(querySnapshot.docs.isEmpty){
@@ -97,11 +112,12 @@ class Providers with ChangeNotifier {
 
   }
 
-  Future<void> updateProduct(String productId, String newName, String newImag) {
+  Future<void> updateProduct(String productId, String newName, String newImag,String descipcion) {
     CollectionReference products = FirebaseFirestore.instance.collection('Mascotas');
     return products.doc(productId).update({
       'nombre': newName,
       'imagen': newImag,
+      'descipcion': descipcion,
       'estado': 'normal',
       
     })
@@ -120,7 +136,6 @@ class Providers with ChangeNotifier {
     });
   }
 
-
   Future<void> reportarPerdido(Map<String, dynamic> mascota) async {
     try {
       await FirebaseFirestore.instance.collection('Mascotas').doc(mascota['id']).update({
@@ -133,8 +148,6 @@ class Providers with ChangeNotifier {
       rethrow;
     }
   }
-  
-
 
   Future<void> reportarEncontrado(String mascotaId) async {
     try {
@@ -161,18 +174,57 @@ class Providers with ChangeNotifier {
     });
   }
 
+  Future<void> pickAndSaveImage() async {
+    try {
+      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+            String? userId = FirebaseAuth.instance.currentUser?.uid;
+      if (pickedFile != null && userId != null) {
+        _selectedImage = File(pickedFile.path);
+        
+        final querySnapshot = await FirebaseFirestore.instance.collection('Fotos').where('userId', isEqualTo: userId).get();
 
-Future<void> getFotos() async {
-  try {
-    FirebaseFirestore.instance.collection('Fotos').snapshots().listen((snapshot) {
-      _detalles = snapshot.docs.map((doc) => {...doc.data(), 'id': doc.id}).toList();
-      notifyListeners();
-    });
-  } catch (error) {
-    print("Error al obtener encontrados: $error");
-    _detalles = [];
-    notifyListeners();
-  }
+        if(querySnapshot.docs.isNotEmpty){
+        await FirebaseFirestore.instance.collection('Fotos').doc(querySnapshot.docs.first.id).update({
+          'imagePath': pickedFile.path,
+          'userId': FirebaseAuth.instance.currentUser?.uid,
+        });}
+        else {
+          await FirebaseFirestore.instance.collection('Fotos').add({
+            'imagePath': pickedFile.path,
+            'userId': userId,
+          });
+        }
+        _currentImagePath = pickedFile.path;
+        notifyListeners();
+      }
+    } catch (e) {
+      print("Error al guardar la imagen: $e");
+      rethrow;
+    }
   }
 
+  Future<void> getUserPhoto() async {
+    try {
+      String? userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId != null) {
+        final querySnapshot = await FirebaseFirestore.instance
+            .collection('Fotos')
+            .where('userId', isEqualTo: userId)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          _currentImagePath = querySnapshot.docs.first.get('imagePath');
+          if (_currentImagePath != null) {
+            _selectedImage = File(_currentImagePath!);
+          }
+          notifyListeners();
+        }
+      }
+    } catch (e) {
+      print("Error al obtener la foto: $e");
+    }
+  }
 }
+
+
+

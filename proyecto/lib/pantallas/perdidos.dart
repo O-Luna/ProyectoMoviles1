@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:proyecto/pantallas/detalles.dart';
@@ -74,25 +76,35 @@ class _PerdidosState extends State<Perdidos> {
                       ],
                     ),
                     child: Row(
-                      children: [
-                        Container(
-                          width: 110,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              bottomLeft: Radius.circular(20),
-                            ),
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                mascota['imagen'] ?? 
-                                'https://via.placeholder.com/110x120'
+                            children: [
+                              Container(
+                                width: 110,
+                                height: 115,
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    bottomLeft: Radius.circular(20),
+                                  ),
+                                  child: provider.products[index]['imagen'] != null
+                                      ? Image.file(
+                                          File(provider.products[index]['imagen']),
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return const Icon(
+                                              Icons.pets,
+                                              size: 50,
+                                              color: Colors.grey,
+                                            );
+                                          },
+                                        )
+                                      : const Icon(
+                                          Icons.pets,
+                                          size: 50,
+                                          color: Colors.grey,
+                                        ),
+                                ),
                               ),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Expanded(
+                              Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(12),
                             child: Column(
@@ -129,10 +141,12 @@ class _PerdidosState extends State<Perdidos> {
                                 ),
                               ),
                             );
-                          },
-                        ),
-                      ],
-                    ),
+                          }
+                          
+                            )
+            
+                            ],
+                          ),
                   ),
                 ),
               );
