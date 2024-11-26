@@ -78,8 +78,16 @@ class Providers with ChangeNotifier {
   );
 
     Future<void> getProducts() async {
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('Mascotas').get();
-    _products = snapshot.docs.map((doc){final data=doc.data() as Map<String, dynamic>; data['id']=doc.id;return data;}).toList();
+    //QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('Mascotas').get();
+    //_products = snapshot.docs.map((doc){final data=doc.data() as Map<String, dynamic>; data['id']=doc.id;return data;}).toList();
+
+     String? userId = FirebaseAuth.instance.currentUser?.uid;
+     QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('Mascotas').get();
+      final querySnapshot = await FirebaseFirestore.instance.collection('Mascotas').where('userId', isEqualTo: userId).get();
+         if (querySnapshot.docs.isNotEmpty) {
+         _products = querySnapshot.docs.map((doc){final data=doc.data() as Map<String, dynamic>; data['id']=doc.id;return data;}).toList();
+          notifyListeners();
+        }
     notifyListeners();
   }
 
@@ -98,6 +106,7 @@ class Providers with ChangeNotifier {
     'descipcion': descipcion,
     'latitud': 4.6097100, 
     'longitud': -74.0817500,
+    'userId': FirebaseAuth.instance.currentUser?.uid
 
   });
 
