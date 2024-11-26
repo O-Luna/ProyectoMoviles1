@@ -77,16 +77,23 @@ class _DetallesState extends State<Detalles> {
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       const SizedBox(height: 16),
+                      
                       Center(
-                        child: ElevatedButton(
+                        child: widget.mascota['estado'] == 'normal'
+                        ?ElevatedButton(
                           onPressed: () { },
                           child: Text("Configurar bluetooth"),
-                        ),
+                        )
+                        : Container()
                       ),
                       const SizedBox(height: 16),
                       if (detallesMascota['latitud'] != null) ...[
-                        const Text(
-                          'Ubicación:',
+                        Text(
+                          widget.mascota['estado'] == 'perdido'
+                                ? 'Ubicación donde se perdió'
+                                : widget.mascota['estado'] == 'encontrado'? 'Ubicación donde se encontró'
+                                : 'Ubicación',
+                          //'Ubicación:',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -121,9 +128,12 @@ class _DetallesState extends State<Detalles> {
                               if (widget.mascota['estado'] == 'perdido') {
                                 await Provider.of<Providers>(context, listen: false)
                                     .reportarEncontrado(widget.mascota['id']);
-                              } else {
+                              } else if (widget.mascota['estado'] == 'encontrado'){
                                 await Provider.of<Providers>(context, listen: false)
-                                    .reportarPerdido(widget.mascota);
+                                    .reportarNormal(widget.mascota['id']);
+                              } else{
+                                await Provider.of<Providers>(context, listen: false)
+                                .reportarPerdido(widget.mascota);
                               }
                               Navigator.pop(context);
                             } catch (e) {
@@ -134,8 +144,9 @@ class _DetallesState extends State<Detalles> {
                           },
                           child: Text(
                             widget.mascota['estado'] == 'perdido'
-                                ? '¡Mascota Encontrada!'
-                                : 'Reportar como Perdido',
+                                ? '¡Reportar como encontrada!'
+                                : widget.mascota['estado'] == 'encontrado'? '¡Encontrada!'
+                                : 'Reportar como perdido',
                           ),
                         ),
                       ),

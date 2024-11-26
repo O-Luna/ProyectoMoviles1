@@ -163,6 +163,20 @@ class Providers with ChangeNotifier {
     }
   }
 
+    Future<void> reportarNormal(String mascotaId) async {
+    try {
+      await FirebaseFirestore.instance.collection('Mascotas').doc(mascotaId).update({
+        'estado': 'normal',
+        'fecha_encuentro': DateTime.now().toString(),
+      });
+
+      notifyListeners();
+    } catch (error) {
+      print("Error al reportar como encontrado: $error");
+      rethrow;
+    }
+  }
+
    void getEncontradas() {
     FirebaseFirestore.instance.collection('Mascotas').where('estado', isEqualTo: 'encontrado').snapshots().listen((snapshot) {
       _encontrados = snapshot.docs.map((doc) {
