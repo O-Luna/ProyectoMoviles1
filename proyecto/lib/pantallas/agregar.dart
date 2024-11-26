@@ -123,20 +123,22 @@ class _AddState extends State<Add> {
                               } else {
                                 productsProvider.updateProduct(widget.id, name, _selectedImage!.path,descripcion);
                               }
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const Inicio()),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => const Inicio()),
+                              // );
+                              Navigator.pop(context);
                             }
                           },
                           child: const Text("Guardar"),
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const Inicio()),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => const Inicio()),
+                            // );
+                            Navigator.pop(context);
                           },
                           child: const Text("Cancelar"),
                         ),

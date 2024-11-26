@@ -95,23 +95,7 @@ class _ConfigState extends State<Config> {
                             ),
                     ),
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        duration: Duration(seconds: 5),
-                        content: Text(
-                            'Pendiente: Falta añadir el bluetooth y su configuración'),
-                        action: SnackBarAction(
-                          label: 'Cerrar',
-                          onPressed: () {},
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text("Configurar bluetooth"),
-                ),
+                ),                
                 ElevatedButton(
                   onPressed: () async {
                     await FirebaseAuth.instance.signOut();

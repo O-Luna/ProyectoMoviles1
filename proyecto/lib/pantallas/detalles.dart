@@ -77,6 +77,13 @@ class _DetallesState extends State<Detalles> {
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       const SizedBox(height: 16),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () { },
+                          child: Text("Configurar bluetooth"),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
                       if (detallesMascota['latitud'] != null) ...[
                         const Text(
                           'Ubicación:',

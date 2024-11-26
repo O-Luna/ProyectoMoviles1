@@ -74,7 +74,7 @@ class _EncontradosState extends State<Encontrados> {
                         ),
                       ],
                     ),
-     child: Row(
+                    child: Row(
                             children: [
                               Container(
                                 width: 110,
@@ -84,9 +84,11 @@ class _EncontradosState extends State<Encontrados> {
                                     topLeft: Radius.circular(20),
                                     bottomLeft: Radius.circular(20),
                                   ),
-                                  child: provider.products[index]['imagen'] != null
+                                  //child: provider.products[index]['imagen'] != null
+                                  child: mascota['imagen'] != null
                                       ? Image.file(
-                                          File(provider.products[index]['imagen']),
+                                          //File(provider.products[index]['imagen']),
+                                          File(mascota['imagen']),
                                           fit: BoxFit.cover,
                                           errorBuilder: (context, error, stackTrace) {
                                             return const Icon(
