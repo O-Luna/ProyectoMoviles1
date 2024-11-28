@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:proyecto/pantallas/encontrados.dart';
 import 'package:proyecto/pantallas/configuracion.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
 class Providers with ChangeNotifier {
   bool _ActivDarkMode = false;
@@ -21,6 +22,9 @@ class Providers with ChangeNotifier {
 
   File? _selectedImage2;
   File? get selectedImage2 => _selectedImage2;
+
+  // BluetoothDevice? _deviceConnected;
+  // BluetoothDevice? get deviceConnected => _deviceConnected;
  
 
   List<Map<String, dynamic>> _products = [];
@@ -35,7 +39,7 @@ class Providers with ChangeNotifier {
   List<Map<String, dynamic>> _perdidas = [];
   List<Map<String, dynamic>> get perdidas => _perdidas;
 
-    List<Map<String, dynamic>> _fotos = [];
+  List<Map<String, dynamic>> _fotos = [];
   List<Map<String, dynamic>> get fotos => _fotos;
 
 
@@ -106,7 +110,9 @@ class Providers with ChangeNotifier {
     'descipcion': descipcion,
     'latitud': 4.6097100, 
     'longitud': -74.0817500,
+    'estado': 'normal',
     'userId': FirebaseAuth.instance.currentUser?.uid
+    
 
   });
 

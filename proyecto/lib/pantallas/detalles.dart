@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:proyecto/pantallas/bluetooth.dart';
 import 'package:proyecto/providers/providers.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'dart:io';
@@ -81,7 +82,16 @@ class _DetallesState extends State<Detalles> {
                       Center(
                         child: widget.mascota['estado'] == 'normal'
                         ?ElevatedButton(
-                          onPressed: () { },
+                          onPressed: () { 
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Bluetooth(
+                                mascota: detallesMascota,
+                              ),
+                            ),
+                          );
+                          },
                           child: Text("Configurar bluetooth"),
                         )
                         : Container()
