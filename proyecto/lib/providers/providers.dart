@@ -23,9 +23,17 @@ class Providers with ChangeNotifier {
   File? _selectedImage2;
   File? get selectedImage2 => _selectedImage2;
 
-  // BluetoothDevice? _deviceConnected;
-  // BluetoothDevice? get deviceConnected => _deviceConnected;
- 
+  BluetoothDevice? _deviceConnected;
+  BluetoothDevice? get deviceConnected => _deviceConnected;
+  set deviceConnected(BluetoothDevice? device) {
+     _deviceConnected = device; notifyListeners(); 
+  }
+
+  BluetoothConnection? _connection;
+  BluetoothConnection? get connection => _connection;
+    set connection(BluetoothConnection? device) {
+     _connection = device; notifyListeners(); 
+  }
 
   List<Map<String, dynamic>> _products = [];
   List<Map<String, dynamic>> get products => _products;
@@ -253,6 +261,19 @@ class Providers with ChangeNotifier {
       print("Error al obtener la foto: $e");
     }
   }
+
+  //   // Método para actualizar el dispositivo conectado
+  // void setDeviceConnected(BluetoothDevice? device) {
+  //   _deviceConnected = device;
+  //   notifyListeners();
+  // }
+
+  // // Método para desconectar el dispositivo
+  // Future<void> disconnectDevice() async {
+  //   // Lógica para desconectar el dispositivo aquí
+  //   _deviceConnected = null;
+  //   notifyListeners();
+  // } 
 }
 
 

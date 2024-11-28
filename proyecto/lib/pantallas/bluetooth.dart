@@ -23,9 +23,9 @@ class _BluetoothState extends State<Bluetooth> {
   final _bluetooth = FlutterBluetoothSerial.instance;
   bool _bluetoothState = false;
   bool _isConnecting = false;
-  BluetoothConnection? _connection;
+  //BluetoothConnection? _connection;
   List<BluetoothDevice> _devices = [];
-  BluetoothDevice? _deviceConnected;
+  //BluetoothDevice? _deviceConnected;
   int times = 0;
   String latitud= "0.0";
   String longitud= "0.0";
@@ -37,7 +37,9 @@ class _BluetoothState extends State<Bluetooth> {
   }
 
   void _receiveData() {
-    _connection?.input?.listen((event) {
+    var provider = Provider.of<Providers>(context);
+    //_connection?.input?.listen((event) {
+    provider.connection?.input?.listen((event) {
 
       if(!state){
         setState(() => latitud = String.fromCharCodes(event));
@@ -50,9 +52,14 @@ class _BluetoothState extends State<Bluetooth> {
   }
 
   void _sendData(String data) {
-    if (_connection?.isConnected ?? false) {
-      _connection?.output.add(ascii.encode(data));
-    }
+    var provider = Provider.of<Providers>(context);
+    
+    // if (_connection?.isConnected ?? false) {
+    //   _connection?.output.add(ascii.encode(data));
+    // }
+      if (provider.connection?.isConnected ?? false) {
+      provider.connection?.output.add(ascii.encode(data));
+      }
   }
 
   void _requestPermission() async {
@@ -86,19 +93,23 @@ class _BluetoothState extends State<Bluetooth> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Configurar bluetooth'),
-      ),
-      body: Column(
-        children: [
-          _controlBT(),
-          _infoDevice(),
-          Expanded(child: _listDevices()),
-          _inputSerial(),
-        ],
-      ),
+    return Consumer<Providers>(
+      builder: (context, provider, child) {
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text('Configurar bluetooth'),
+          ),
+          body: Column(
+            children: [
+              _controlBT(),
+              _infoDevice(),
+              Expanded(child: _listDevices()),
+              _inputSerial(),
+            ],
+          ),
+        );
+      }
     );
   }
 
@@ -120,14 +131,20 @@ class _BluetoothState extends State<Bluetooth> {
   }
 
   Widget _infoDevice() {
+  var provider = Provider.of<Providers>(context);
+
     return ListTile(
       tileColor: Colors.black12,
-      title: Text("Conectado a: ${_deviceConnected?.name ?? "ninguno"}"),
-      trailing: _connection?.isConnected ?? false
-          ? TextButton(
+      //title: Text("Conectado a: ${_deviceConnected?.name ?? "ninguno"}"),
+      title: Text("Conectado a: ${provider.deviceConnected?.name ?? "ninguno"}"),
+      //trailing: _connection?.isConnected ?? false
+      trailing: provider.connection?.isConnected ?? false
+          ? TextButton( 
               onPressed: () async {
-                await _connection?.finish();
-                setState(() => _deviceConnected = null);
+                //await _connection?.finish();
+                await provider.connection?.finish();
+                //setState(() => _deviceConnected = null);
+                setState(() => provider.deviceConnected = null);
               },
               child: const Text("Desconectar"),
             )
@@ -139,6 +156,8 @@ class _BluetoothState extends State<Bluetooth> {
   }
 
   Widget _listDevices() {
+  var provider = Provider.of<Providers>(context);
+
     return _isConnecting
         ? const Center(child: CircularProgressIndicator())
         : SingleChildScrollView(
@@ -155,8 +174,10 @@ class _BluetoothState extends State<Bluetooth> {
                           onPressed: () async {
                             setState(() => _isConnecting = true);
 
-                            _connection = await BluetoothConnection.toAddress(device.address);
-                            _deviceConnected = device;
+                            //_connection = await BluetoothConnection.toAddress(device.address);
+                            provider.connection = await BluetoothConnection.toAddress(device.address);
+                            //_deviceConnected = device;
+                            provider.deviceConnected = device;
                             _devices = [];
                             _isConnecting = false;
 
