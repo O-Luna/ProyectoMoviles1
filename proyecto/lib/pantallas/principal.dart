@@ -107,6 +107,9 @@ class _PrincipalState extends State<Principal> {
                                       ),
                                       Row(
                                         children: [
+                                          Icon(provider.products[index]['estado'] == 'normal' ? Icons.sentiment_satisfied_alt: provider.products[index]['estado'] == 'perdido' ? Icons.sentiment_dissatisfied_sharp:
+                                          Icons.sentiment_neutral,
+                                          color: provider.products[index]['estado'] == 'normal' ? Colors.green : provider.products[index]['estado'] == 'perdido' ? Colors.red : Colors.yellow,),
                                           IconButton(
                                             icon: const Icon(
                                               Icons.edit,
