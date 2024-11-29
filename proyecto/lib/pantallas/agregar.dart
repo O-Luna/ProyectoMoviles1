@@ -51,103 +51,105 @@ class _AddState extends State<Add> {
           appBar: AppBar(
             title: const Text('Nueva mascota'),
           ),
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(70, 50, 70, 40),
-                child: Column(
-                  children: [
-                    TextField(
-                      controller: nombre,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        labelText: 'Nombre',
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    Padding(
-                    padding: const EdgeInsets.fromLTRB(70, 5, 70, 30),
-                    ),
-                     TextField(
-                      controller: desc,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        labelText: 'Descripción',
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () => _requestPermissions(context),
-                      child: ClipOval(
-                        child: Container(
-                          width: 200,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            shape: BoxShape.circle,
-                          ),
-                          child: _selectedImage != null
-                              ? Image.file(
-                                  _selectedImage!,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const Icon(
-                                      Icons.pets,
-                                      size: 200,
-                                      color: Colors.grey,
-                                    );
-                                  },
-                                )
-                              : const Icon(
-                                  Icons.pets,
-                                  size: 200,
-                                  color: Colors.grey,
-                                ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(70, 50, 70, 40),
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: nombre,
+                        keyboardType: TextInputType.text,
+                        decoration: const InputDecoration(
+                          labelText: 'Nombre',
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          border: OutlineInputBorder(),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            final name = nombre.text;
-                            final descripcion = desc.text;
-                            if (name != "" && _selectedImage != null) {
-                              if (widget.editar == 0) {
-                                productsProvider.addProduct(name, _selectedImage!.path,descripcion);
-                              } else {
-                                productsProvider.updateProduct(widget.id, name, _selectedImage!.path,descripcion);
+                      Padding(
+                      padding: const EdgeInsets.fromLTRB(70, 5, 70, 30),
+                      ),
+                       TextField(
+                        controller: desc,
+                        keyboardType: TextInputType.text,
+                        decoration: const InputDecoration(
+                          labelText: 'Descripción',
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: () => _requestPermissions(context),
+                        child: ClipOval(
+                          child: Container(
+                            width: 200,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              shape: BoxShape.circle,
+                            ),
+                            child: _selectedImage != null
+                                ? Image.file(
+                                    _selectedImage!,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const Icon(
+                                        Icons.pets,
+                                        size: 200,
+                                        color: Colors.grey,
+                                      );
+                                    },
+                                  )
+                                : const Icon(
+                                    Icons.pets,
+                                    size: 200,
+                                    color: Colors.grey,
+                                  ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              final name = nombre.text;
+                              final descripcion = desc.text;
+                              if (name != "" && _selectedImage != null) {
+                                if (widget.editar == 0) {
+                                  productsProvider.addProduct(name, _selectedImage!.path,descripcion);
+                                } else {
+                                  productsProvider.updateProduct(widget.id, name, _selectedImage!.path,descripcion);
+                                }
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(builder: (context) => const Inicio()),
+                                // );
+                                Navigator.pop(context);
                               }
+                            },
+                            child: const Text("Guardar"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
                               // Navigator.push(
                               //   context,
                               //   MaterialPageRoute(builder: (context) => const Inicio()),
                               // );
                               Navigator.pop(context);
-                            }
-                          },
-                          child: const Text("Guardar"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => const Inicio()),
-                            // );
-                            Navigator.pop(context);
-                          },
-                          child: const Text("Cancelar"),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              )
-            ],
+                            },
+                            child: const Text("Cancelar"),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         );
       },

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:proyecto/pantallas/encontrados.dart';
 import 'package:proyecto/pantallas/configuracion.dart';
@@ -26,14 +27,74 @@ class Providers with ChangeNotifier {
   BluetoothDevice? _deviceConnected;
   BluetoothDevice? get deviceConnected => _deviceConnected;
   set deviceConnected(BluetoothDevice? device) {
-     _deviceConnected = device; notifyListeners(); 
+     _deviceConnected = device; 
+     notifyListeners(); 
   }
 
   BluetoothConnection? _connection;
   BluetoothConnection? get connection => _connection;
-    set connection(BluetoothConnection? device) {
-     _connection = device; notifyListeners(); 
+    set connection(BluetoothConnection? connection) { //decive
+     _connection = connection; //device
+     if (connection != null) {
+     _setupConnectionListeners(connection);
+   }
+     notifyListeners(); 
   }
+
+  String? _id_gps;
+  String? get id_gps => _id_gps;
+  set id_gps(String? gipies) {
+     _id_gps = gipies; 
+     notifyListeners(); 
+  } 
+
+  String? _id_gps_blu;
+  String? get id_gps_blu => _id_gps_blu;
+  set id_gps_blu(String? gipies_blu) {
+     _id_gps_blu = gipies_blu; 
+     notifyListeners(); 
+  } 
+
+  double? _lat;
+  double? get lat => _lat;
+  set lat(double? locationn) {
+     _lat = locationn; 
+     notifyListeners(); 
+  } 
+
+  double? _lon;
+  double? get lon => _lon;
+  set lon(double? location2) {
+     _lon = location2; 
+     notifyListeners(); 
+  } 
+
+  void _setupConnectionListeners(BluetoothConnection connection) {
+  connection.input?.listen(
+    (Uint8List data) {
+      print('Datos recibidos en Provider: $data');
+      print('Datos como String: ${String.fromCharCodes(data)}');
+
+      List<String> parts = String.fromCharCodes(data).split(", "); 
+       double value1 = double.parse(parts[0]); 
+       double value2 = double.parse(parts[1]);
+
+      lat=value1; 
+      lon=value2;
+
+      updateLocation(id_gps_blu!, lat!, lon!);
+      notifyListeners(); 
+    },
+    onDone: () {
+      print('Conexión finalizada');
+    },
+    onError: (error) {
+      print('Error en conexión: $error');
+    }
+  );
+}
+
+
 
   List<Map<String, dynamic>> _products = [];
   List<Map<String, dynamic>> get products => _products;
@@ -147,6 +208,19 @@ class Providers with ChangeNotifier {
       .then((value) => print("Product name updated successfully!"))
       .catchError((error) => print("Failed to update product name: $error"));
   }
+
+    Future<void> updateLocation(String productId, double latitud_blu, double longitud_blu) {
+
+    CollectionReference products = FirebaseFirestore.instance.collection('Mascotas');
+    return products.doc(productId).update({
+      'latitud': latitud_blu,
+      'longitud': longitud_blu,      
+    })
+      .then((value) => print("Product name updated successfully!"))
+      .catchError((error) => print("Failed to update product name: $error"));
+
+  }
+
 
  void getPerdidas() {
     FirebaseFirestore.instance.collection('Mascotas').where('estado', isEqualTo: 'perdido').snapshots().listen((snapshot) {

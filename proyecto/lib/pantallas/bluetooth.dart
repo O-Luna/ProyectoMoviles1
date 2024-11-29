@@ -180,8 +180,8 @@ class _BluetoothState extends State<Bluetooth> {
                             provider.deviceConnected = device;
                             _devices = [];
                             _isConnecting = false;
-
-                            _receiveData();
+                            
+                            _receiveData();                            
 
                             setState(() {});
                           },
@@ -195,6 +195,7 @@ class _BluetoothState extends State<Bluetooth> {
   }
 
   Widget _inputSerial() {
+    var provider = Provider.of<Providers>(context);
     return ListTile(
       // trailing: TextButton(
       //   child: const Text('reiniciar'),
@@ -208,28 +209,30 @@ class _BluetoothState extends State<Bluetooth> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(              
-                  "Lat: ($latitud)",
+                  //"Lat: ($latitud)",
+                  "Lat: (${provider.lat.toString()})",
                   style: const TextStyle(fontSize: 18.0),
                 ),
                 Text(              
-                  "Long: ($longitud)",
+                  //"Long: ($longitud)",
+                  "Long: (${provider.lon.toString()})",
                   style: const TextStyle(fontSize: 18.0),
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(              
-                  widget.mascota['latitud'].toString(),
-                  style: const TextStyle(fontSize: 18.0),
-                ),
-                Text(              
-                  widget.mascota['longitud'].toString(),
-                  style: const TextStyle(fontSize: 18.0),
-                ),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //   children: [
+            //     Text(              
+            //       widget.mascota['latitud'].toString(),
+            //       style: const TextStyle(fontSize: 18.0),
+            //     ),
+            //     Text(              
+            //       widget.mascota['longitud'].toString(),
+            //       style: const TextStyle(fontSize: 18.0),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),

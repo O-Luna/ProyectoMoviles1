@@ -55,6 +55,7 @@ class _PrincipalState extends State<Principal> {
                               ),
                             ),
                           );
+                          provider.id_gps= provider.products[index]['id'];
                         },
                         child: Container(
                           height: 120,
